@@ -15,7 +15,8 @@ The preprocessing step uses [dlib](http://dlib.net)’s face landmark predictor 
 * [opencv](https://www.pyimagesearch.com/2016/12/05/macos-install-opencv-3-and-python-3-5)
 * [dlib](https://www.learnopencv.com/install-dlib-on-macos)
 
-A detailed script on how to install these components on a Linux machine can be found in the `Dockerfile` of the
+A detailed script on how to install these components on a Linux machine can be found in the
+[Dockerfile](https://github.com/ColeMurray/medium-facenet-tutorial/blob/master/Dockerfile) of the
 [medium-facenet-tutorial](https://github.com/ColeMurray/medium-facenet-tutorial) Github tutorial.
 
 ## Step 1: Download of the LFW data set and the dlib face landmark predictor
