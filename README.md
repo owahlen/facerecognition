@@ -21,20 +21,33 @@ A detailed script on how to install these components on a Linux machine can be f
 [Dockerfile](https://github.com/ColeMurray/medium-facenet-tutorial/blob/master/Dockerfile) of the
 [medium-facenet-tutorial](https://github.com/ColeMurray/medium-facenet-tutorial) Github tutorial.
 
-## Step 1: Download of the LFW data set and the dlib face landmark predictor
-The `Makefile` contains the `curl`, `tar`, and `bzip2` commands
-to download and unpack all needed files into the `data` folder:
-```
-$ make
-```
-Note that `make clean`can be used to remove all temporary files.
+## Project Execution
+All execution steps are defined in the `Makefile` and executed using `make`.
+Note that the command `make clean` can be used to remove all temporary files.
 
-## Step 2: Preprocess the image files
+### Step 1: Download data files
+Files that need to be downloaded are:
+* the _Labeled Faces in the Wild_ data set
+* the dlib _face landmark predictor_
+* the pretrained weights of the Inception Resnet V1 model
+
+To download and unpack all needed files into the `data` and `model` folders execute:
+```
+$ make download
+```
+
+### Step 2: Preprocess the image files
 In order to train the tensorflow model the input images must be normalized.
 First the largest face is identified in each LFW image.
 Then image is then cropped and centered by the inner eyes and the bottom lip and scaled to 180x180 pixels.
 The preprocessing step is achieved by executing the command:
 ```
-$ python preprocess.py
+$ make preprocess
 ```
 The processed images are stored in the `output/intermediate` folder.
+
+### Step 3: Train the Inception Resnet V1 Tensorflow model
+To train the model execute the command:
+```
+$ make train
+```
