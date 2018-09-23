@@ -51,3 +51,12 @@ To train the model execute the command:
 ```
 $ make train
 ```
+The training result is stored in the file `output/classifier.pkl`.
+
+### Step 4: Evaluate the quality of the classifier
+To evaluate the quality of the classifier execute the command:
+```
+$ make test
+```
+This will print the detection accuracy for each image.
+The overall accuracy should be around 90%.

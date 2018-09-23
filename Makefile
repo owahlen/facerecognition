@@ -14,9 +14,18 @@ TF_MODEL := $(TF_MODEL_DIR)/20170511-185253/20170511-185253.pb
 CLASSIFIER := $(OUTPUT_DIR)/classifier.pkl
 DOWNLOADS := $(LFW_SENTINEL) $(LANDMARKS_FILE) $(TF_MODEL)
 
-.PHONY: all train preprocess download clean
+.PHONY: all test train preprocess download clean
 
-all: train
+all: test
+
+test: $(CLASSIFIER)
+	$(PYTHON) train_classifier.py \
+		--input-dir $(PREPROCESS_OUTPUT_DIR) \
+		--model-path $(TF_MODEL) \
+		--classifier-path $(CLASSIFIER) \
+		--num-threads 16 \
+		--num-epochs 25 \
+		--min-num-images-per-class 10 \
 
 train: $(CLASSIFIER)
 
