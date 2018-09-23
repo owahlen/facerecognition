@@ -10,8 +10,7 @@ import tensorflow as tf
 from sklearn.svm import SVC
 from tensorflow.python.platform import gfile
 
-from lfw_input import filter_dataset, split_dataset, get_dataset
-from . import lfw_input
+from lfw_input import filter_dataset, split_dataset, get_dataset, get_image_paths_and_labels, read_data
 
 logger = logging.getLogger(__name__)
 
@@ -93,10 +92,10 @@ def _get_test_and_train_set(input_dir, min_num_images_per_label, split_ratio=0.7
 def _load_images_and_labels(dataset, image_size, batch_size, num_threads, num_epochs, random_flip=False,
                             random_brightness=False, random_contrast=False):
     class_names = [cls.name for cls in dataset]
-    image_paths, labels = lfw_input.get_image_paths_and_labels(dataset)
-    images, labels = lfw_input.read_data(image_paths, labels, image_size, batch_size, num_epochs, num_threads,
-                                         shuffle=False, random_flip=random_flip, random_brightness=random_brightness,
-                                         random_contrast=random_contrast)
+    image_paths, labels = get_image_paths_and_labels(dataset)
+    images, labels = read_data(image_paths, labels, image_size, batch_size, num_epochs, num_threads,
+                               shuffle=False, random_flip=random_flip, random_brightness=random_brightness,
+                               random_contrast=random_contrast)
     return images, labels, class_names
 
 

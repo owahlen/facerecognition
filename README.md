@@ -6,7 +6,9 @@ Recognize people from an image of their face.
 The project is based on this tutorial of Cole Murray:
 [Building a Facial Recognition Pipeline with Deep Learning in Tensorflow](https://hackernoon.com/building-a-facial-recognition-pipeline-with-deep-learning-in-tensorflow-66e7645015b8).
 It uses preprocessed images of the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset
-to train a Tensorflow based convolutional neuronal network.
+to train an
+[Inception Resnet V1](https://github.com/davidsandberg/facenet/wiki/Classifier-training-of-inception-resnet-v1)
+Tensorflow based convolutional neuronal network.
 The preprocessing step uses [dlib](http://dlib.net)’s face landmark predictor to crop the images to the relevant part of the face.
 
 ## Installation Requirements
@@ -28,9 +30,11 @@ $ make
 Note that `make clean`can be used to remove all temporary files.
 
 ## Step 2: Preprocess the image files
-In order to train the tensorflow model the images must be cropped and scaled to show only a standardized part of the face.
-This preprocessing step is achieved by executing the command:
+In order to train the tensorflow model the input images must be normalized.
+First the largest face is identified in each LFW image.
+Then image is then cropped and centered by the inner eyes and the bottom lip and scaled to 180x180 pixels.
+The preprocessing step is achieved by executing the command:
 ```
 $ python preprocess.py
 ```
-Note that the cropped images are stored in the `output` folder.
+The processed images are stored in the `output/intermediate` folder.

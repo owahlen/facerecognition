@@ -11,6 +11,10 @@
 data/*
 !data/.gitkeep
 
+# model data
+model/*
+!model/.gitkeep
+
 # generated data
 output/*
 

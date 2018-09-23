@@ -86,7 +86,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument('--input-dir', type=str, action='store', default='data/lfw', dest='input_dir')
     parser.add_argument('--predictor', type=str, action='store', default='data/shape_predictor_68_face_landmarks.dat', dest='predictor')
-    parser.add_argument('--output-dir', type=str, action='store', default='output', dest='output_dir')
+    parser.add_argument('--output-dir', type=str, action='store', default='output/intermediate', dest='output_dir')
     parser.add_argument('--crop-dim', type=int, action='store', default=180, dest='crop_dim',
                         help='Size to crop images to')
 

@@ -1,3 +1,4 @@
+PYTHON := python
 DATADIR := data
 OUTPUTDIR := output
 LFW := lfw
@@ -5,21 +6,34 @@ LANDMARKS := shape_predictor_68_face_landmarks.dat
 LFWDIR := $(DATADIR)/$(LFW)
 LFWSENTINEL := $(LFWDIR)/.sentinel
 LANDMARKSFILE := $(DATADIR)/$(LANDMARKS)
+TFMODELDIR := model
+TFMODEL := $(TFMODELDIR)/20170511-185253/20170511-185253.pb
 
-all: $(LFWSENTINEL) $(LANDMARKSFILE)
+all: preprocess
 
-$(LFWSENTINEL): $(LFWDIR).tgz
-	mkdir -p $(DATADIR) && tar -xvz -C $(DATADIR) -f $< && touch $(LFWDIR)/.sentinel
+train: preprocess
+	$(PYTHON) train_classifier.py \
+		--input-dir output/intermediate \
+		--model-path model/20170511-185253/20170511-185253.pb \
+		--classifier-path output/classifier.pkl \
+		--num-threads 16 \
+		--num-epochs 25 \
+		--min-num-images-per-class 10 \
+		--is-train
 
-$(LFWDIR).tgz:
-	curl -SL --create-dirs -o $@ http://vis-www.cs.umass.edu/lfw/lfw.tgz
+preprocess: download
+	$(PYTHON) preprocess.py
 
-$(LANDMARKSFILE): $(LANDMARKSFILE).bz2
-	bzip2 -d $<
+download: $(LFWSENTINEL) $(LANDMARKSFILE) $(TFMODEL)
 
-$(LANDMARKSFILE).bz2:
-	curl -SL --create-dirs -o $@ http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
+$(LFWSENTINEL):
+	curl -SL http://vis-www.cs.umass.edu/lfw/$(LFW).tgz | tar -xz -C $(DATADIR) && touch $(LFWDIR)/.sentinel
+
+$(LANDMARKSFILE):
+	curl -SL http://dlib.net/files/$(LANDMARKS).bz2 | bunzip2 >$(LANDMARKSFILE)
+
+$(TFMODEL):
+	$(PYTHON) download_and_extract_model.py
 
 clean:
-	rm -rf $(DATADIR)/* $(OUTPUTDIR)/*
-
+	rm -rf $(DATADIR)/* $(OUTPUTDIR)/* $(TFMODELDIR)/*

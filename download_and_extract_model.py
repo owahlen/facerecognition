@@ -64,8 +64,7 @@ def save_response_content(response, destination):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     parser = argparse.ArgumentParser(add_help=True)
-    parser.add_argument('--model-dir', type=str, action='store', dest='model_dir',
-                        help='Path to model protobuf graph')
+    parser.add_argument('--model-dir', type=str, action='store', default='model', dest='model_dir', help='Path to model protobuf graph')
 
     args = parser.parse_args()
 
