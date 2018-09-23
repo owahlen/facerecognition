@@ -39,7 +39,7 @@ $ make download
 ### Step 2: Preprocess the image files
 In order to train the tensorflow model the input images must be normalized.
 First the largest face is identified in each LFW image.
-Then image is then cropped and centered by the inner eyes and the bottom lip and scaled to 180x180 pixels.
+Then the image is cropped and centered by the inner eyes and the bottom lip and scaled to 180x180 pixels.
 The preprocessing step is achieved by executing the command:
 ```
 $ make preprocess
