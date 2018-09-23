@@ -9,7 +9,7 @@ LANDMARKSFILE := $(DATADIR)/$(LANDMARKS)
 TFMODELDIR := model
 TFMODEL := $(TFMODELDIR)/20170511-185253/20170511-185253.pb
 
-all: preprocess
+all: train
 
 train: preprocess
 	$(PYTHON) train_classifier.py \
