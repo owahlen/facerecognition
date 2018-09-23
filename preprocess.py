@@ -21,7 +21,8 @@ def main(input_dir, predictor, output_dir, crop_dim):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    for image_dir in os.listdir(input_dir):
+    image_dirs = [d for d in os.listdir(input_dir) if os.path.isdir(os.path.join(input_dir, d))]
+    for image_dir in image_dirs:
         image_output_dir = os.path.join(output_dir, os.path.basename(os.path.basename(image_dir)))
         if not os.path.exists(image_output_dir):
             os.makedirs(image_output_dir)
@@ -85,7 +86,8 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument('--input-dir', type=str, action='store', default='data/lfw', dest='input_dir')
-    parser.add_argument('--predictor', type=str, action='store', default='data/shape_predictor_68_face_landmarks.dat', dest='predictor')
+    parser.add_argument('--predictor', type=str, action='store', default='data/shape_predictor_68_face_landmarks.dat',
+                        dest='predictor')
     parser.add_argument('--output-dir', type=str, action='store', default='output/intermediate', dest='output_dir')
     parser.add_argument('--crop-dim', type=int, action='store', default=180, dest='crop_dim',
                         help='Size to crop images to')
