@@ -8,8 +8,8 @@
 .DS_Store
 
 # downloaded data
-data/*
-!data/.gitkeep
+datasets/*
+!datasets/.gitkeep
 
 # model data
 model/*
