@@ -1,5 +1,5 @@
 PYTHON := python
-export PYTHONPATH = src
+PYTHONPATH := src
 DATASETS_DIR := datasets
 OUTPUT_DIR := output
 LFW_DIR := $(DATASETS_DIR)/lfw
@@ -13,18 +13,20 @@ TF_MODEL := $(TF_MODEL_DIR)/$(TF_MODEL_NAME)/$(TF_MODEL_NAME).pb
 CLASSIFIER := $(OUTPUT_DIR)/classifier.pkl
 DOWNLOADS := $(LFW_RAW_SENTINEL) $(TF_MODEL)
 
+export PYTHONPATH
+
 .PHONY: all test train align download clean
 
 all: test
 
-test: $(CLASSIFIER)
-	$(PYTHON) train_classifier.py \
-		--input-dir $(LFW_ALIGN_OUTPUT_DIR) \
-		--model-path $(TF_MODEL) \
-		--classifier-path $(CLASSIFIER) \
-		--num-threads 16 \
-		--num-epochs 25 \
-		--min-num-images-per-class 10 \
+test:
+	$(PYTHON) src/validate_on_lfw.py \
+		$(LFW_ALIGN_OUTPUT_DIR) \
+		$(TF_MODEL_DIR)/$(TF_MODEL_NAME) \
+		--distance_metric 1 \
+		--use_flipped_images \
+		--subtract_mean \
+		--use_fixed_image_standardization
 
 train: $(CLASSIFIER)
 
