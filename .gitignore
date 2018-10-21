@@ -15,6 +15,10 @@ datasets/*
 model/*
 !model/.gitkeep
 
+# log data
+logs/*
+!logs/.gitkeep
+
 # generated data
 output/*
 
