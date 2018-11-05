@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from scipy import misc
 import sys
 import argparse
 import tensorflow as tf
@@ -8,7 +7,6 @@ import numpy as np
 import facenet
 import align.detect_face
 import cv2
-from os.path import realpath, normpath
 
 
 class FaceDetector():
