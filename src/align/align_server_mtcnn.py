@@ -12,13 +12,11 @@ import json
 
 
 class FaceDetector():
-    def __init__(self, gpu_memory_fraction, detect_multiple_faces):
-        self.gpu_memory_fraction = gpu_memory_fraction
+    def __init__(self, detect_multiple_faces):
         self.detect_multiple_faces = detect_multiple_faces
 
         with tf.Graph().as_default():
-            gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=self.gpu_memory_fraction)
-            sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
+            sess = tf.Session(config=tf.ConfigProto(log_device_placement=False))
             with sess.as_default():
                 self.pnet, self.rnet, self.onet = align.detect_face.create_mtcnn(sess, None)
 
@@ -64,7 +62,7 @@ def main(args):
     socket = context.socket(zmq.REP)
     socket.bind('tcp://*:%d' % (args.port))
 
-    face_detector = FaceDetector(args.gpu_memory_fraction, args.detect_multiple_faces)
+    face_detector = FaceDetector(args.detect_multiple_faces)
 
     while True:
         img = socket.recv()
@@ -79,8 +77,6 @@ def main(args):
 def parse_arguments(argv):
     parser = argparse.ArgumentParser(description='Take images from isight camera')
 
-    parser.add_argument('--gpu_memory_fraction', type=float,
-                        help='Upper bound on the amount of GPU memory that will be used by the process.', default=1.0)
     parser.add_argument('--detect_multiple_faces', type=bool,
                         help='Detect and align multiple faces per image.', default=False)
     parser.add_argument('--port', type=int,
