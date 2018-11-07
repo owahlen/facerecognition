@@ -7,6 +7,8 @@ import numpy as np
 import facenet
 import align.detect_face
 import cv2
+import zmq
+import json
 
 
 class FaceDetector():
@@ -54,29 +56,24 @@ class FaceDetector():
                     det_arr.append(det[index, :].astype(int))
             else:
                 det_arr.append(np.squeeze(det.astype(int)))
-        return det_arr
+        return np.array(det_arr)
 
 
 def main(args):
-    PREVIEW_WINDOW = 'preview'
-    ESCAPE_KEY = 27
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind('tcp://*:%d' % (args.port))
 
-    cv2.namedWindow(PREVIEW_WINDOW)
-    vc = cv2.VideoCapture(0)
     face_detector = FaceDetector(args.gpu_memory_fraction, args.detect_multiple_faces)
-    doCapture = True
 
-    while doCapture:
-        rval, frame = vc.read()
+    while True:
+        img = socket.recv()
+        npimg = np.fromstring(img, dtype=np.uint8)
+        frame = cv2.imdecode(npimg, 1)
         if frame is not None:
             faces = face_detector.detect(frame)
-            for (x1, y1, x2, y2) in faces:
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.imshow(PREVIEW_WINDOW, frame)
-        if cv2.waitKey(1) == ESCAPE_KEY or cv2.getWindowProperty(PREVIEW_WINDOW, cv2.WND_PROP_VISIBLE) < 1:
-            doCapture = False
-
-    cv2.destroyWindow(PREVIEW_WINDOW)
+            response = json.dumps(faces.tolist())
+            socket.send_string(response)
 
 
 def parse_arguments(argv):
@@ -86,6 +83,8 @@ def parse_arguments(argv):
                         help='Upper bound on the amount of GPU memory that will be used by the process.', default=1.0)
     parser.add_argument('--detect_multiple_faces', type=bool,
                         help='Detect and align multiple faces per image.', default=False)
+    parser.add_argument('--port', type=int,
+                        help='Receiving port', default=5555)
 
     return parser.parse_args(argv)
 
