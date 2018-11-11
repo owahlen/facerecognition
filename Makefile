@@ -90,12 +90,11 @@ $(LFW_RAW_SENTINEL):
 
 $(CASIA_RAW_SENTINEL):
 	mkdir -p $(CASIA_DIR) && \
-	$(PYTHON) src/download_and_extract_model.py --data-dir $(CASIA_DIR) --casia-name $(CASIA_NAME) && \
+	$(PYTHON) src/download_and_extract_casia.py --data-dir $(CASIA_DIR) --casia-name $(CASIA_NAME) && \
 	touch $@
-
 
 $(TF_MODEL):
 	$(PYTHON) src/download_and_extract_model.py --model-dir $(TF_MODEL_DIR) --model-name $(TF_MODEL_NAME)
 
 clean:
-	rm -rf $(DATASETS_DIR)/* $(OUTPUT_DIR)/* $(TF_MODEL_DIR)/* $(LOGS)/*
+	rm -rf $(DATASETS_DIR)/* $(OUTPUT_DIR)/* $(TF_MODEL_DIR)/* $(LOG_DIR)/*
