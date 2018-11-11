@@ -6,7 +6,7 @@ import requests
 import zipfile
 
 drive_id_dict = {
-    'casia-webface': '1Of_EVz-yHV7QVWQGihYfvtny9Ne8qXVz'
+    'CASIA-WebFace': '1Of_EVz-yHV7QVWQGihYfvtny9Ne8qXVz'
 }
 
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument('--data-dir', type=str, action='store', default='datasets', dest='data_dir',
                         help='Path to the datasets directory')
-    parser.add_argument('--casia-name', type=str, action='store', default='casia-webface', dest='casia_name',
+    parser.add_argument('--casia-name', type=str, action='store', default='CASIA-WebFace', dest='casia_name',
                         help='Name of the CASIA dataset to load')
     args = parser.parse_args()
     download_and_extract_file(args.casia_name, args.data_dir)
