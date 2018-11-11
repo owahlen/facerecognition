@@ -10,7 +10,7 @@ LFW_ALIGN_SENTINEL := $(LFW_ALIGN_OUTPUT_DIR)/.sentinel
 TF_MODEL_DIR := model
 TF_MODEL_NAME := 20180402-114759
 TF_MODEL := $(TF_MODEL_DIR)/$(TF_MODEL_NAME)/$(TF_MODEL_NAME).pb
-CLASSIFIER := $(OUTPUT_DIR)/classifier.pkl
+LOG_DIR := logs
 DOWNLOADS := $(LFW_RAW_SENTINEL) $(TF_MODEL)
 
 export PYTHONPATH
@@ -28,17 +28,30 @@ test:
 		--subtract_mean \
 		--use_fixed_image_standardization
 
-train: $(CLASSIFIER)
-
-$(CLASSIFIER): $(LFW_ALIGN_SENTINEL)
-	$(PYTHON) train_classifier.py \
-		--input-dir $(LFW_ALIGN_OUTPUT_DIR) \
-		--model-path $(TF_MODEL) \
-		--classifier-path $(CLASSIFIER) \
-		--num-threads 16 \
-		--num-epochs 25 \
-		--min-num-images-per-class 10 \
-		--is-train
+train: $(LFW_ALIGN_SENTINEL)
+	$(PYTHON) src/train_softmax.py \
+		--logs_base_dir $(LOG_DIR) \
+		--models_base_dir $(TF_MODEL_DIR) \
+		--data_dir $(LFW_ALIGN_OUTPUT_DIR) \
+		--image_size 160 \
+		--model_def models.inception_resnet_v1 \
+		--lfw_dir $(LFW_ALIGN_OUTPUT_DIR) \
+		--optimizer ADAM \
+		--learning_rate -1 \
+		--max_nrof_epochs 150 \
+		--keep_probability 0.8 \
+		--random_crop \
+		--random_flip \
+		--use_fixed_image_standardization \
+		--learning_rate_schedule_file data/learning_rate_schedule_classifier_casia.txt \
+		--weight_decay 5e-4 \
+		--embedding_size 512 \
+		--lfw_distance_metric 1 \
+		--lfw_use_flipped_images \
+		--lfw_subtract_mean \
+		--validation_set_split_ratio 0.05 \
+		--validate_every_n_epochs 5 \
+		--prelogits_norm_loss_factor 5e-4
 
 align: $(LFW_ALIGN_SENTINEL)
 
@@ -63,4 +76,4 @@ $(TF_MODEL):
 	$(PYTHON) src/download_and_extract_model.py --model-dir $(TF_MODEL_DIR) --model-name $(TF_MODEL_NAME)
 
 clean:
-	rm -rf $(DATASETS_DIR)/* $(OUTPUT_DIR)/* $(TF_MODEL_DIR)/*
+	rm -rf $(DATASETS_DIR)/* $(OUTPUT_DIR)/* $(TF_MODEL_DIR)/* $(LOGS)/*
