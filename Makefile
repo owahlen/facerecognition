@@ -1,4 +1,4 @@
-PYTHON := python
+PYTHON := python3
 PYTHONPATH := src
 DATASETS_DIR := datasets
 OUTPUT_DIR := output
