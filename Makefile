@@ -5,7 +5,7 @@ OUTPUT_DIR := output
 LFW_DIR := $(DATASETS_DIR)/lfw
 LFW_RAW_DIR := $(LFW_DIR)/raw
 LFW_RAW_SENTINEL := $(LFW_RAW_DIR)/.sentinel
-LFW_ALIGN_OUTPUT_DIR := $(LFW_DIR)/lfw_mtcnnpy_160
+LFW_ALIGN_OUTPUT_DIR := $(LFW_DIR)/lfw_mtcnnpy_182
 LFW_ALIGN_SENTINEL := $(LFW_ALIGN_OUTPUT_DIR)/.sentinel
 TF_MODEL_DIR := model
 TF_MODEL_NAME := 20180402-114759
@@ -59,8 +59,8 @@ $(LFW_ALIGN_SENTINEL): $(DOWNLOADS)
 	$(PYTHON) src/align/align_dataset_mtcnn.py \
 		$(LFW_RAW_DIR) \
 		$(LFW_ALIGN_OUTPUT_DIR) \
-		--image_size 160 \
-		--margin 32 \
+		--image_size 182 \
+		--margin 44 \
 		--random_order \
 		--gpu_memory_fraction 0.25 && \
 		touch $@
