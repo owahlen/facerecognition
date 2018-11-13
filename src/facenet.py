@@ -287,20 +287,19 @@ def get_triplet_batch(triplets, batch_index, batch_size):
     return batch
 
 def get_learning_rate_from_file(filename, epoch):
+    learning_rate = None
     with open(filename, 'r') as f:
         for line in f.readlines():
             line = line.split('#', 1)[0]
             if line:
                 par = line.strip().split(':')
                 e = int(par[0])
-                if par[1]=='-':
-                    lr = -1
-                else:
-                    lr = float(par[1])
+                lr = float(par[1])
                 if e <= epoch:
                     learning_rate = lr
                 else:
                     return learning_rate
+    return learning_rate
 
 class ImageClass():
     "Stores the paths to images for a given class"
