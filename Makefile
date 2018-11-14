@@ -14,18 +14,18 @@ CASIA_RAW_SENTINEL := $(CASIA_RAW_DIR)/.sentinel
 CASIA_ALIGN_OUTPUT_DIR := $(CASIA_DIR)/casia_mtcnnpy_182
 CASIA_ALIGN_SENTINEL := $(CASIA_ALIGN_OUTPUT_DIR)/.sentinel
 TF_MODEL_DIR := model
-TF_MODEL_NAME := 20180402-114759
+TF_MODEL_NAME := 20181112-063708
 TF_MODEL := $(TF_MODEL_DIR)/$(TF_MODEL_NAME)/$(TF_MODEL_NAME).pb
 LOG_DIR := logs
 DOWNLOADS := $(CASIA_RAW_SENTINEL) $(LFW_RAW_SENTINEL)
 
 export PYTHONPATH
 
-.PHONY: all test train align download clean
+.PHONY: all validate train align download clean
 
-all: test
+all: validate
 
-test:
+validate: $(LFW_ALIGN_SENTINEL)
 	$(PYTHON) src/validate_on_lfw.py \
 		$(LFW_ALIGN_OUTPUT_DIR) \
 		$(TF_MODEL_DIR)/$(TF_MODEL_NAME) \
