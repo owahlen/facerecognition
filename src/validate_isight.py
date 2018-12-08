@@ -16,7 +16,7 @@ def main(args):
     QUIT_KEY = 27  # Escape
     ANCHOR_KEY = ord(' ')
     WIDTH = 640
-    THRESHOLD = 0.39
+    THRESHOLD = 0.85
 
     face_detector = detector.FaceDetector(args.detect_multiple_faces)
     face_extractor = extractor.FaceExtractor(160, 44)
@@ -46,7 +46,7 @@ def main(args):
             for i, (x1, y1, x2, y2) in enumerate(boxes):
                 if isinstance(anchor_embedding, np.ndarray):
                     distance = facenet.distance([embeddings[i]], [anchor_embedding])
-                    if distance <= THRESHOLD:
+                    if distance[0] <= THRESHOLD:
                         color = (0, 255, 0)
                     else:
                         color = (0, 0, 255)
